@@ -117,10 +117,10 @@ router.post('/respondFriendRequest',
             }
 
             const { responseToId, action } = req.body;
-            const currentUser = await User.findOne({ id: req.user.id });
+            const currentUser = await User.findOne({ user_id: req.user.id });
             if (!currentUser) return res.status(404).send('Current User not found');
 
-            const friendRequest = await FriendRequest.findOne({ friendId: req.user.id, currentUserId: responseToId })
+            const friendRequest = await FriendRequest.findOne({ receiver_id: req.user.id, sender_id: responseToId })
             if (!friendRequest) return res.status(404).send('No Friend Requests found');
 
             if (friendRequest.status === 'pending') {
@@ -134,7 +134,7 @@ router.post('/respondFriendRequest',
             }
 
             if(action === 'decline'){
-                await friendRequest.deleteOne({currentUserId: responseToId});
+                await FriendRequest.deleteOne({sender_id: responseToId});
                 return res.status(202).send('Friend Request Deleted');
             }
 
