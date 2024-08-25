@@ -17,7 +17,7 @@ const fetchUser = (req: any, res : Response, next: NextFunction) => {
     next();
   } catch (error: any) {
     console.log(error.message);
-    res.status(401).json({ msg: 'Not Authorised' });
+    res.status(500).json({ msg: 'INTERNAL SERVER ERROR' });
   }
 };
 
