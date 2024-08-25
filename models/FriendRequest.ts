@@ -2,18 +2,23 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const FriendRequestSchema = new Schema({
-    currentUserId: {
+    friend_req_id: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    sender_id: {
         type: String,
         required: true
     },
-    friendId: {
+    receiver_id: {
         type: String,
         required: true
     },
-    user: {
+    sender: {
         type: String
     },
-    friend: {
+    receiver: {
         type: String
     },
     status: {

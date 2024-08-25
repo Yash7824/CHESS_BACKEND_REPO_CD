@@ -1,8 +1,8 @@
 export interface FriendRequestDto{
-    userId: string
-    friendId: string
-    user: string
-    friend: string
+    sender_id: string
+    receiver_id: string
+    sender: string
+    receiver: string
     status: string
     date: Date
 }

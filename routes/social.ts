@@ -6,8 +6,7 @@ import authorization from "../middleware/authorization";
 import User from "../models/User";
 import FriendRequest from "../models/FriendRequest";
 import { FriendRequestDto } from "../dto/FriendRequestDto";
-import mongoose from "mongoose";
-import { ObjectId } from 'mongodb';
+import {v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
 const router = express.Router();
@@ -43,31 +42,32 @@ router.post('/sendFriendRequest',
 
             if(req.user.id === friendId) return res.status(403).send(`Can't send friend request to self`);
 
-           const currentUser = await User.findById(req.user.id);
+           const currentUser = await User.findOne({user_id: req.user.id});
             if (!currentUser) return res.status(404).send(`Current User doesn't exists`);
             
-            const friendObject = await User.findById(friendId);
+            const friendObject = await User.findOne({user_id: friendId});
             if (!friendObject) return res.status(404).send('Not Found');
 
-            let existingRequest = await FriendRequest.find({ currentUserId: currentUser.id, friendId: friendId });
+            let existingRequest = await FriendRequest.find({ currentUserId: currentUser.user_id, friendId: friendId });
             if (existingRequest.length !== 0) {
                 if (existingRequest[0].status === 'pending') return res.status(400).send('Friend Request Pending');
                 return res.status(404).send('Friend Request Already sent')
             }
 
             let friendRequest = new FriendRequest({
-                currentUserId: req.user.id,
-                friendId: friendId,
-                user: currentUser.name,
-                friend: friendObject.name,
+                friend_req_id: uuidv4().toString(),
+                sender_id: req.user.id,
+                receiver_id: friendId,
+                sender: currentUser.name,
+                receiver: friendObject.name,
                 status: 'pending'
             })
 
             let friendRequestDto: FriendRequestDto = {
-                userId: req.user.id,
-                friendId: friendId,
-                user: currentUser.name,
-                friend: friendObject.name,
+                sender_id: req.user.id,
+                receiver_id: friendId,
+                sender: currentUser.name,
+                receiver: friendObject.name,
                 status: 'pending',
                 date: new Date()
             }
@@ -90,10 +90,10 @@ router.get('/getPendingFriendRequests',
                 return res.status(400).json({ success, errors: errors.array() });
             }
 
-            const currentUser = await User.findById(req.user.id);
+            const currentUser = await User.findOne({user_id: req.user.id});
             if (!currentUser) return res.status(404).send('Current User not found');
 
-            const friendRequest = await FriendRequest.find({ currentUserId: req.user.id })
+            const friendRequest = await FriendRequest.find({ receiver_id: req.user.id })
             if (friendRequest.length === 0) return res.status(404).send('No Friend Requests found');
 
             return res.status(200).json(friendRequest);

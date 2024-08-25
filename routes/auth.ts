@@ -43,7 +43,7 @@ router.post(
 
         // storing the req.body parameters and the secured hash password in the user object.
         user = new User({
-          user_id: uuidv4(),
+          user_id: uuidv4().toString(),
           name: name,
           email: email,
           password: encrypted,
