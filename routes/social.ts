@@ -93,8 +93,8 @@ router.get('/getPendingFriendRequests',
             const currentUser = await User.findOne({user_id: req.user.id});
             if (!currentUser) return res.status(404).send('Current User not found');
 
-            const friendRequest = await FriendRequest.find({ receiver_id: req.user.id })
-            if (friendRequest.length === 0) return res.status(404).send('No Friend Requests found');
+            const friendRequest = await FriendRequest.find({ receiver_id: req.user.id, status: 'pending' })
+            if (friendRequest.length === 0) return res.status(200).send('No Friend Requests found');
 
             return res.status(200).json(friendRequest);
         } catch (error: any) {
