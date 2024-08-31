@@ -52,7 +52,7 @@ router.post('/sendFriendRequest',
             let existingRequest = await FriendRequest.find({ currentUserId: currentUser.user_id, friendId: friendId });
             if (existingRequest.length !== 0) {
                 if (existingRequest[0].status === 'pending') return res.status(400).send('Friend Request Pending');
-                return res.status(200).send('Friend Request Already sent')
+                return res.status(200).json({statusMsg: 'Friend Request Already sent'})
             }
 
             let friendRequest = new FriendRequest({
