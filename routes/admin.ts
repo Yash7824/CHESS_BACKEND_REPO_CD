@@ -16,7 +16,7 @@ router.get('/getAllUsers', async(req: any, res: Response) => {
         const users = await User.find();
         return res.status(200).json(users);
     }catch(error: any){
-        return res.status(500).send('Internal Server Error');
+        return res.status(500).json({statusMsg: 'Internal Server Error'});
     }
 })
 
@@ -25,7 +25,7 @@ router.get('/getAllUserFullDetails', async(req: any, res: Response) => {
         const userFulls = await UserFull.find();
         return res.status(200).json(userFulls);
     }catch(error: any){
-        return res.status(500).send('Internal Server Error'); 
+        return res.status(500).json({statusMsg: 'Internal Server Error'}); 
     }
 })
 

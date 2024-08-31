@@ -34,8 +34,8 @@ router.post(
         let user = await User.findOne({ email });
         let userFull = await UserFull.findOne({ email })
 
-        if (user) return res.status(404).send(`User Already exists`);
-        if (userFull) return res.status(404).send(`User Already exists`);
+        if (user) return res.status(404).json({statusMsg: `User Already exists`});
+        if (userFull) return res.status(404).json({statusMsg: `User Already exists`});
 
         // Hashing the password
         const salt = await bcrypt.genSalt(10);
@@ -69,11 +69,11 @@ router.post(
 
       } catch (error: any) {
         console.error(error.message);
-        res.status(500).send("Server Error");
+        res.status(500).json({statusMsg: "Server Error"});
       }
     } catch (error: any) {
       console.error(error.message);
-      res.status(500).send("Internal Server Error");
+      res.status(500).json({statusMsg: "Internal Server Error"});
     }
   }
 );
@@ -92,7 +92,7 @@ router.post('/login',
       try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if (!user) return res.status(404).send('User not found');
+        if (!user) return res.status(404).json({statusMsg: 'User not found'});
 
         // after the user's email getting matched, compare the req.body.password with the user.password
         const passwordCompare = await bcrypt.compare(password, user.password);
@@ -108,10 +108,10 @@ router.post('/login',
         return res.status(200).json({authToken})
 
       } catch (error: any) {
-        return res.status(500).send('Server Error');
+        return res.status(500).json({statusMsg: 'Server Error'});
       }
     } catch (error: any) {
-      return res.status(500).send('Internal Server Error');
+      return res.status(500).json({statusMsg: 'Internal Server Error'});
     }
   })
 
@@ -120,11 +120,11 @@ router.get('/getUser', authorization, async (req: any, res: Response) => {
   try {
     const userId = req.user.id;
     const user = await User.find({user_id: userId}).select('-password');
-    if (!user) return res.status(404).send('User Not found');
+    if (!user) return res.status(404).json({statusMsg: 'User Not found'});
     return res.status(200).json(user);
 
   } catch (error: any) {
-    return res.status(500).send('Internal Server Error');
+    return res.status(500).json({statusMsg: 'Internal Server Error'});
   }
 
 })
@@ -145,7 +145,7 @@ router.put('/updateUser',
       
       const userId = req.user.id;
       let user = await User.find({user_id: userId});
-      if (!user) return res.status(404).send('User Not Found');
+      if (!user) return res.status(404).json({statusMsg: 'User Not Found'});
 
       const { name, password, confirmPassword }: UpdateUser = req.body;
       const newUser: any = {}
@@ -162,7 +162,7 @@ router.put('/updateUser',
       return res.status(400).json(user);
 
     } catch (error: any) {
-      return res.status(500).send('Internal Server Error');
+      return res.status(500).json({statusMsg: 'Internal Server Error'});
     }
   })
 

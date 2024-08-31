@@ -18,10 +18,10 @@ router.post(
         try {
             let friend = req.query.friend
             const searchFriend = await User.find({ name: { $regex: new RegExp('^' + friend + '$', 'i') } });
-            if (!searchFriend) return res.status(400).send('Not Found');
+            if (!searchFriend) return res.status(400).json({statusMsg: 'Not Found'});
             return res.status(200).json(searchFriend);
         } catch (error: any) {
-            return res.status(500).send("Internal Server Error");
+            return res.status(500).json({statusMsg: "Internal Server Error"});
         }
     }
 )
@@ -76,7 +76,7 @@ router.post('/sendFriendRequest',
             await friendRequest.save();
             return res.status(200).json(friendRequestDto);
         } catch (error: any) {
-            return res.status(500).send('Internal Server Error: ' + error.message);
+            return res.status(500).json({statusMsg: 'Internal Server Error: ' + error.message});
         }
     }
 )
@@ -92,14 +92,14 @@ router.get('/getPendingFriendRequests',
             }
 
             const currentUser = await User.findOne({user_id: req.user.id});
-            if (!currentUser) return res.status(404).send('Current User not found');
+            if (!currentUser) return res.status(404).json({statusMsg: 'Current User not found'});
 
             const friendRequest = await FriendRequest.find({ receiver_id: req.user.id, status: 'pending' })
-            if (friendRequest.length === 0) return res.status(200).send('No Friend Requests found');
+            if (friendRequest.length === 0) return res.status(200).json({statusMsg: 'No Friend Requests found'});
 
             return res.status(200).json(friendRequest);
         } catch (error: any) {
-            return res.status(500).send('Internal Server Error');
+            return res.status(500).json({statusMsg: 'Internal Server Error'});
         }
     }
 )
@@ -119,30 +119,30 @@ router.post('/respondFriendRequest',
 
             const { responseToId, action } = req.body;
             const currentUser = await User.findOne({ user_id: req.user.id });
-            if (!currentUser) return res.status(404).send('Current User not found');
+            if (!currentUser) return res.status(404).json({statusMsg: 'Current User not found'});
 
             const friendRequest = await FriendRequest.findOne({ receiver_id: req.user.id, sender_id: responseToId })
-            if (!friendRequest) return res.status(404).send('No Friend Requests found');
+            if (!friendRequest) return res.status(404).json({statusMsg: 'No Friend Requests found'});
 
             if (friendRequest.status === 'pending') {
                 friendRequest.status = action;
             }else if(friendRequest.status === 'accept'){
-                return res.status(400).send('Request already accepted');
+                return res.status(400).json({statusMsg: 'Request already accepted'});
             }else if(friendRequest.status === 'decline'){
-                return res.status(403).send('Request was declined');
+                return res.status(403).json({statusMsg: 'Request was declined'});
             }else {
-                return res.status(404).send('Invalid');
+                return res.status(404).json({statusMsg: 'Invalid'});
             }
 
             if(action === 'decline'){
                 await FriendRequest.deleteOne({sender_id: responseToId});
-                return res.status(202).send('Friend Request Deleted');
+                return res.status(202).json({statusMsg: 'Friend Request Deleted'});
             }
 
             await friendRequest.save();
             return res.status(200).json(friendRequest);
         } catch (error: any) {
-            return res.status(500).send('Internal Server Error');
+            return res.status(500).json({statusMsg: 'Internal Server Error'});
         }
     })
 
@@ -156,7 +156,7 @@ router.get('/getAllFriends', authorization, async(req: any, res: Response) => {
         }
 
         const currentUser = await User.findOne({user_id: req.user.id});
-        if (!currentUser) return res.status(404).send('Current User not found');
+        if (!currentUser) return res.status(404).json({statusMsg: 'Current User not found'});
 
         const users = await User.find();
         const allFriends = users.filter(user => user.user_id !== currentUser.user_id);
@@ -169,7 +169,7 @@ router.get('/getAllFriends', authorization, async(req: any, res: Response) => {
 
         return res.status(200).json(friendRes);
     }catch(error: any){
-        return res.status(500).send('Internal Server Error');
+        return res.status(500).json({statusMsg: 'Internal Server Error'});
     }
 })
 
