@@ -95,9 +95,15 @@ router.get('/getPendingFriendRequests',
             if (!currentUser) return res.status(404).json({statusMsg: 'Current User not found'});
 
             const friendRequest = await FriendRequest.find({ receiver_id: req.user.id, status: 'pending' })
-            if (friendRequest.length === 0) return res.status(200).json({statusMsg: 'No Friend Requests found'});
+            if (friendRequest.length === 0) return res.status(200).json({
+                statusMsg: 'No Friend Requests found', 
+                friendRequest: friendRequest
+            });
 
-            return res.status(200).json(friendRequest);
+            return res.status(200).json({
+                statusMsg: 'success',
+                friendRequest: friendRequest
+            });
         } catch (error: any) {
             return res.status(500).json({statusMsg: 'Internal Server Error'});
         }
