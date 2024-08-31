@@ -7,6 +7,7 @@ import User from "../models/User";
 import FriendRequest from "../models/FriendRequest";
 import { FriendRequestDto } from "../dto/FriendRequestDto";
 import {v4 as uuidv4 } from 'uuid';
+import { AllFriendsDto } from "../dto/AllFriendsDto";
 
 dotenv.config();
 const router = express.Router();
@@ -144,5 +145,32 @@ router.post('/respondFriendRequest',
             return res.status(500).send('Internal Server Error');
         }
     })
+
+
+router.get('/getAllFriends', authorization, async(req: any, res: Response) => {
+    try{
+        let success = false;
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ success, errors: errors.array() });
+        }
+
+        const currentUser = await User.findOne({user_id: req.user.id});
+        if (!currentUser) return res.status(404).send('Current User not found');
+
+        const users = await User.find();
+        const allFriends = users.filter(user => user.user_id !== currentUser.user_id);
+        success = true;
+
+        const friendRes: AllFriendsDto = {
+            success: success,
+            friends: allFriends
+        }
+
+        return res.status(200).json(friendRes);
+    }catch(error: any){
+        return res.status(500).send('Internal Server Error');
+    }
+})
 
 module.exports = router;
