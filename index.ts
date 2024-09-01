@@ -35,6 +35,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/admin', require('./routes/admin'))
 app.use('/api/social', require('./routes/social'))
+app.use('/api/nn_model', require('./routes/nn_model'))
 
 // Maintain a list of active rooms and users in each room
 const activeRooms: Map<string, Room> = new Map();
