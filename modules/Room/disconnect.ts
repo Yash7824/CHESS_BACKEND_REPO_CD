@@ -1,5 +1,5 @@
 import { Socket, Server } from "socket.io";
-import { Room } from "../interfaces/room";
+import { Room } from "../../interfaces/room";
 
 const disconnect = (io:Server, socket: Socket, activeRooms: Map<string, Room>, socketIDToUserNameMapper: Map<string,string>) => {
   const user: string = socketIDToUserNameMapper.get(socket.id) ||  '';

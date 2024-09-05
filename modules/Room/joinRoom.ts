@@ -1,5 +1,5 @@
 import { Socket, Server } from "socket.io";
-import { Room } from "../interfaces/room";
+import { Room } from "../../interfaces/room";
 
 const joinRoom = (io: Server, socket: Socket, roomName:string, userName:string, activeRooms: Map<String,Room>, socketIDToUserNameMapper: Map<string,string>) => {
     if (activeRooms.has(roomName) && activeRooms.get(roomName)!.users.size < 2) {

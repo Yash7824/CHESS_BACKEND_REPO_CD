@@ -1,5 +1,5 @@
 import { Socket, Server } from "socket.io";
-import { Room } from "../interfaces/room";
+import { Room } from "../../interfaces/room";
 
 const createRoom = (io: Server, socket: Socket, roomName:string, userName:string, activeRooms: Map<string, Room>, socketIDToUserNameMapper: Map<string,string>) => {
     socket.join(roomName);
