@@ -12,6 +12,7 @@ import { Room } from "./interfaces/room";
 import connectToMongo from "./config/db"
 import { createInitialBoard } from "./modules/Chess/createInitialBoard";
 import makeMovement from "./modules/Chess/makeMovement";
+import restartGame from "./modules/Chess/restartGame";
 
 dotenv.config();
 
@@ -40,8 +41,10 @@ app.use('/api/social', require('./routes/social'))
 app.use('/api/nn_model', require('./routes/nn_model'))
 
 
-let chessBoard = createInitialBoard();
-let currentPlayer = 'white'; // Alternates between 'white' and 'black'
+let gameState = {
+  chessboard: createInitialBoard(),
+  currentPlayer: 'white'
+};
 
 // Maintain a list of active rooms and users in each room
 const activeRooms: Map<string, Room> = new Map();
@@ -54,7 +57,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => disconnect(io, socket, activeRooms, socketIDToUserNameMapper));
   socket.on("movementTable", (roomName: string, updatedMovementList: any) => updateMovementList(io, socket, updatedMovementList, roomName, activeRooms, socketIDToUserNameMapper))
 
-  socket.on('makeMove', (fromRow: number, fromCol: number, toRow: number, toCol: number) => makeMovement(io, socket, fromRow, fromCol, toRow, toCol, chessBoard, currentPlayer))
+  socket.on('makeMove', (fromRow: number, fromCol: number, toRow: number, toCol: number) => makeMovement(io, socket, fromRow, fromCol, toRow, toCol, gameState))
+
+  socket.on('restartGame', () => restartGame(io, gameState))
 });
 
 server.listen(port, () => {

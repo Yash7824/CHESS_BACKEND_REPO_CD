@@ -8,30 +8,34 @@ import isValidRookMove from "./isValidRookMove";
 const isValidMove = (fromRow: number, fromCol: number, toRow: number, toCol: number, board: string[][], currentPlayer: string) => {// Current chess board state
     const piece = board[fromRow][fromCol];
     const target = board[toRow][toCol];
-  
     // Ensure a piece is being moved
     if (!piece) return false;
   
     // Ensure the piece belongs to the current player
     const isWhite = piece === piece.toUpperCase();
+    console.log(isWhite, currentPlayer);
     if ((currentPlayer === 'white' && !isWhite) || (currentPlayer === 'black' && isWhite)) {
       return false;
     }
   
-    const pieceType = piece.toLowerCase();
-  
-    switch (pieceType) {
-      case 'p': // Pawn
+    switch (piece) {
+      case 'p':
+      case 'P': 
         return isValidPawnMove(fromRow, fromCol, toRow, toCol, board, isWhite);
-      case 'r': // Rook
+      case 'r':
+      case 'R':
         return isValidRookMove(fromRow, fromCol, toRow, toCol, board, isWhite);
-      case 'n': // Knight
+      case 'n':
+      case 'N':
         return isValidKnightMove(fromRow, fromCol, toRow, toCol, board, isWhite);
-      case 'b': // Bishop
+      case 'b':
+      case 'B':
         return isValidBishopMove(fromRow, fromCol, toRow, toCol, board, isWhite);
-      case 'q': // Queen
+      case 'q':
+      case 'Q':
         return isValidQueenMove(fromRow, fromCol, toRow, toCol, board, isWhite);
-      case 'k': // King
+      case 'k':
+      case 'K':
         return isValidKingMove(fromRow, fromCol, toRow, toCol, board, isWhite);
       default:
         return false;
