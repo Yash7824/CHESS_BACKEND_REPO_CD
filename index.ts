@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => disconnect(io, socket, activeRooms, socketIDToUserNameMapper));
   socket.on("movementTable", (roomName: string, updatedMovementList: any) => updateMovementList(io, socket, updatedMovementList, roomName, activeRooms, socketIDToUserNameMapper))
 
-  socket.on('makeMove', (fromRow: number, fromCol: number, toRow: number, toCol: number, chessBoard, currentPlayer) => makeMovement(io, socket, fromRow, fromCol, toRow, toCol, chessBoard, currentPlayer))
+  socket.on('makeMove', (fromRow: number, fromCol: number, toRow: number, toCol: number) => makeMovement(io, socket, fromRow, fromCol, toRow, toCol, chessBoard, currentPlayer))
 });
 
 server.listen(port, () => {
