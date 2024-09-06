@@ -8,6 +8,7 @@ This project is an online 2-player chess game where users can log in and compete
 ## Features
 - **User Authentication:** Users can create accounts and log in to play chess.
 - **Real-time Gameplay:** Enjoy a seamless gaming experience with real-time updates.
+-  **Chess-Engine:** Immerse in an exciting player vs computer mode where you can challenge an intelligent **CNN** Model that adapts to strategy.
 - **Game History:** View past games and track your progress.
 - **Responsive Design:** Play anywhere, on any device, with a fully responsive interface.
 - **Chat Functionality:** Communicate with your opponent through an in-game chat feature.
