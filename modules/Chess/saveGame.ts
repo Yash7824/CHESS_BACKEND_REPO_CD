@@ -14,7 +14,7 @@ const saveGame = async (io: Server, authtoken: any, gameAnalysis: any) => {
           };
 
         const response = await axios.post(`${baseURL}/api/gameAnalysis/saveMoves`, gameAnalysis, {headers})
-        io.emit('savedGameData', {data: response.data});
+        io.emit('savedGameData', {response});
     }catch(error: any){
         console.error('Error saving game:', error);
     } 
