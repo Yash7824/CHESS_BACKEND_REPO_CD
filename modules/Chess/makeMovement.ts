@@ -1,7 +1,7 @@
 import { Socket, Server } from "socket.io";
 import isValidMove from "./IsValidMove";
 import isKingInCheck from "./isKingInCheck";
-import isCheckmate from "./isCheckMate";
+import isCheckmate from "./isCheckmate";
 
 const makeMovement = (io: Server, socket: Socket, fromRow: number, fromCol: number, toRow: number, toCol: number, gameState: any, gameAnalysis: any) => {
   let {chessboard, currentPlayer} = gameState;
