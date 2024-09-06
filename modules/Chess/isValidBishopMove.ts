@@ -9,13 +9,16 @@ const isValidBishopMove = (fromRow: number, fromCol: number, toRow: number, toCo
     const colStep = fromCol < toCol ? 1 : -1;
     let row = fromRow + rowStep;
     let col = fromCol + colStep;
-    while (row !== toRow && col !== toCol) {
-      if (board[row][col]) return false; // Blocked by another piece
-      row += rowStep;
-      col += colStep;
-    }
-  
-    return !board[toRow][toCol] || isOpponentPiece(board[toRow][toCol], isWhite);
-  }
 
-  export default isValidBishopMove;
+    // Loop through all squares between the from and to positions
+    while (row !== toRow && col !== toCol) {
+        if (board[row][col]) return false; // Blocked by another piece
+        row += rowStep;
+        col += colStep;
+    }
+
+    // Check if the target square is either empty or occupied by an opponent's piece
+    return !board[toRow][toCol] || isOpponentPiece(board[toRow][toCol], isWhite);
+};
+
+export default isValidBishopMove;

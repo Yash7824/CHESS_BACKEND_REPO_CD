@@ -3,9 +3,12 @@ import isValidMove from "./IsValidMove";
 import isKingInCheck from "./isKingInCheck";
 import isCheckmate from "./isCheckMate";
 
-const makeMovement = (io: Server, socket: Socket, fromRow: number, fromCol: number, toRow: number, toCol: number, gameState: any) => {
+const makeMovement = (io: Server, socket: Socket, fromRow: number, fromCol: number, toRow: number, toCol: number, gameState: any, gameAnalysis: any) => {
   let {chessboard, currentPlayer} = gameState;
     if (isValidMove(fromRow, fromCol, toRow, toCol, chessboard, currentPlayer)) {
+
+      let piece = chessboard[fromRow][fromCol];
+      gameAnalysis.moves.push(`moved-${piece}-${toRow},${toCol}`)
         // Update the board
         chessboard[toRow][toCol] = chessboard[fromRow][fromCol];
         chessboard[fromRow][fromCol] = '';
