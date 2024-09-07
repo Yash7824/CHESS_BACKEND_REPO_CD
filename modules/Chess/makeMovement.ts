@@ -3,7 +3,7 @@ import isValidMove from "./IsValidMove";
 import isKingInCheck from "./isKingInCheck";
 import isCheckmate from "./isCheckmate";
 
-const makeMovement = (io: Server, socket: Socket, fromRow: number, fromCol: number, toRow: number, toCol: number, gameState: any, gameAnalysis: any) => {
+const makeMovement = (io: Server, socket: Socket, fromRow: number, fromCol: number, toRow: number, toCol: number, roomName: string, gameState: any, gameAnalysis: any) => {
   let {chessboard, currentPlayer} = gameState;
     if (isValidMove(fromRow, fromCol, toRow, toCol, chessboard, currentPlayer)) {
 
@@ -28,16 +28,16 @@ const makeMovement = (io: Server, socket: Socket, fromRow: number, fromCol: numb
             // Check for checkmate
             const checkmate = isCheckmate(chessboard, isWhite);
             if (checkmate) {
-                io.emit('gameOver', { winner: currentPlayer });
+                io.to(roomName).emit('gameOver', { winner: currentPlayer });
                 return;
             } else {
-                io.emit('kingInCheck', { player: opponentPlayer });
+                io.to(roomName).emit('kingInCheck', { player: opponentPlayer });
             }
         }
 
         console.log('after validation current player: ', gameState.currentPlayer)
-        io.emit('updateBoard', chessboard);
-        io.emit('currentPlayer', gameState.currentPlayer);
+        io.to(roomName).emit('updateBoard', chessboard);
+        io.to(roomName).emit('currentPlayer', gameState.currentPlayer);
       }
 }
 
