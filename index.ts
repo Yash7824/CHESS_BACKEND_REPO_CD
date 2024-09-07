@@ -3,17 +3,17 @@ import cors from "cors";
 const { createServer } = require("http");
 import { Server, Socket } from "socket.io";
 import dotenv from "dotenv";
-import createRoom from "./modules/Room/createRoom";
-import joinRoom from "./modules/Room/joinRoom";
-import disconnect from "./modules/Room/disconnect";
-import updateChessBoardState from "./modules/Room/updateChessBoardState";
-import updateMovementList from "./modules/Room/updateMovementList";
+import createRoom from "./services/room/createRoom";
+import joinRoom from "./services/room/joinRoom";
+import disconnect from "./services/room/disconnect";
+import updateChessBoardState from "./services/chess/updateChessBoardState";
+import updateMovementList from "./services/chess/updateMovementList";
 import { Room } from "./interfaces/room";
 import connectToMongo from "./config/db"
-import { createInitialBoard } from "./modules/Chess/createInitialBoard";
-import makeMovement from "./modules/Chess/makeMovement";
-import restartGame from "./modules/Chess/restartGame";
-import saveGame from "./modules/Chess/saveGame";
+import { createInitialBoard } from "./services/chess/createInitialBoard";
+import makeMovement from "./services/chess/makeMovement";
+import restartGame from "./services/chess/restartGame";
+import saveGame from "./services/chess/saveGame";
 
 dotenv.config();
 
@@ -36,11 +36,11 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Typescript + Node.js + Express Server");
 });
 
-app.use('/api/auth', require('./routes/auth'))
-app.use('/api/admin', require('./routes/admin'))
-app.use('/api/social', require('./routes/social'))
-app.use('/api/nn_model', require('./routes/nn_model'))
-app.use('/api/gameAnalysis', require('./routes/gameAnalysis'))
+app.use('/api/auth', require('./controllers/AuthController'))
+app.use('/api/admin', require('./controllers/AdminController'))
+app.use('/api/social', require('./controllers/SocialController'))
+app.use('/api/nn_model', require('./controllers/NN_ModelController'))
+app.use('/api/gameAnalysis', require('./controllers/GameAnalysisController'))
 
 
 let gameState = {
