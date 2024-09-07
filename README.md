@@ -34,7 +34,8 @@ This project is an online 2-player chess game where users can log in and compete
 ## Deployment
 - <span> Automated, customized, and executed the software development workflows with GitHub Actions </span>
 - <span> Deployed the Client Application on Netlify using github actions </span> 
-- <span> Deployed the Server Side on AWS Lambda </span>
+- <span> Deployed the Server Side on Render </span>
+- <span> The Server is deployed at <a href="https://chess-xtreme-services.onrender.com" style="text-decoration: none">Server</a>
 
 ## Contributing
 We welcome contributions from the community! To contribute to this project, please follow these steps:
